@@ -1,0 +1,45 @@
+import org.gradle.internal.jvm.Jvm
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+sourceCompatibility = rootProject.ext.javaVersion
+targetCompatibility = rootProject.ext.javaVersion
+
+// create extra configuration for shaded dependencies, so they're not included in the pom
+def shadedConfig = configurations.create('compileShaded')
+shadedConfig.transitive = false
+configurations.compileOnly.extendsFrom(shadedConfig)
+configurations.testCompile.extendsFrom(shadedConfig)
+
+shadowJar {
+    classifier = ''
+    configurations = [shadedConfig]
+
+    relocate 'com.google.auto.common', 'autovaluecursor.shaded.com.google.auto.common'
+    relocate 'com.gabrielittner.auto.value.util', 'autovaluecursor.shaded.com.gabrielittner.auto.value.util'
+}
+
+artifacts {
+    runtime shadowJar
+    archives shadowJar
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly 'com.google.auto.service:auto-service:1.0-rc4'
+    compile "com.google.auto.value:auto-value:1.6.3"
+    compile 'com.squareup:javapoet:1.11.1'
+    compile "com.google.auto.value:auto-value:1.6.3"
+    compile "com.google.guava:guava:27.0-jre"
+    compileShaded 'com.google.auto:auto-common:0.10'
+    compileShaded 'com.gabrielittner.auto.value:auto-value-extension-util:0.4.0'
+
+    compile project(path: ':auto-value-xml-annotations')
+    implementation 'junit:junit:4.12'
+    implementation 'com.google.truth:truth:0.42'
+    implementation 'com.google.testing.compile:compile-testing:0.15'
+    testImplementation files(Jvm.current().getToolsJar())
+}
+
+

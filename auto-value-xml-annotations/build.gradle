@@ -1,0 +1,8 @@
+apply plugin: 'java'
+
+sourceCompatibility = rootProject.ext.javaVersion
+targetCompatibility = rootProject.ext.javaVersion
+
+dependencies {
+    compileOnly "com.google.android:android:2.1.2"
+}

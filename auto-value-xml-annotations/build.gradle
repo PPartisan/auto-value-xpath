@@ -6,3 +6,5 @@ targetCompatibility = rootProject.ext.javaVersion
 dependencies {
     compileOnly "com.google.android:android:2.1.2"
 }
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

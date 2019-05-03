@@ -1,0 +1,26 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+}
+
+ext {
+    javaVersion = JavaVersion.VERSION_1_7
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
